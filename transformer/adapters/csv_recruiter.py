@@ -38,6 +38,9 @@ def _resolve_headers(fieldnames: list[str]) -> dict[str, str]:
 def parse(text: str) -> list[RawRecord]:
     """Parse CSV text into RawRecords. Malformed CSV yields [] (never raises)."""
     try:
+        # Strip a leading UTF-8 BOM (Excel exports) so the first header matches.
+        if text and text[0] == "﻿":
+            text = text[1:]
         reader = csv.DictReader(io.StringIO(text))
         headers = _resolve_headers(reader.fieldnames or [])
         records: list[RawRecord] = []

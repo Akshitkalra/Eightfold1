@@ -192,7 +192,15 @@ def _pick_scalar(candidates: list[tuple[str, str]]):
 
     def score(key):
         srcs = groups[key]
-        return (max(trust_weight(s) for s in srcs), len(srcs))
+        # Deterministic ordering, INDEPENDENT of input order: highest trust, then
+        # most agreement, then the more complete (longer) value, then lexical.
+        # The last two keys break ties so permuting inputs can't change the winner.
+        return (
+            max(trust_weight(s) for s in srcs),
+            len(srcs),
+            len(display[key]),
+            display[key],
+        )
 
     best_key = max(groups, key=score)
     best_source = max(groups[best_key], key=trust_weight)
