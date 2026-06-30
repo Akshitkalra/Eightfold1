@@ -38,47 +38,55 @@ touches — so config changes never require engine changes.
 
 ---
 
-## Setup
+## Quickstart (30 seconds)
+
+```bash
+pip install -r requirements.txt
+python -m transformer --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt --out out/default.json
+python -m pytest -q
+```
+First command installs deps; second produces a canonical profile JSON from the
+sample inputs; third runs all 310 tests. Requires **Python 3.11+**.
+
+---
+
+## Setup (with a virtual environment, recommended)
 
 ```bash
 python -m venv .venv
-# Windows:  .venv\Scripts\activate     |  macOS/Linux:  source .venv/bin/activate
+# Windows (PowerShell):  .venv\Scripts\Activate.ps1
+# Windows (CMD):         .venv\Scripts\activate.bat
+# macOS / Linux:         source .venv/bin/activate
 pip install -r requirements.txt
 ```
-Requires Python 3.11+.
+Requires Python 3.11+. No API keys needed (GitHub source works unauthenticated;
+set `GITHUB_TOKEN` only to raise the rate limit).
 
 ---
 
 ## Run
 
+> Every command below is a **single line** so it copy-pastes cleanly into any
+> shell — Windows PowerShell / CMD **and** macOS / Linux / Git Bash.
+
 **Default canonical schema** (offline file sources):
 ```bash
-python -m transformer \
-  --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt \
-  --out out/default.json
+python -m transformer --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt --out out/default.json
 ```
 
 **Custom config** (rename/remap, normalize, drop provenance):
 ```bash
-python -m transformer \
-  --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt \
-  --config configs/custom.json \
-  --out out/custom.json
+python -m transformer --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt --config configs/custom.json --out out/custom.json
 ```
 
-**Add the live GitHub source**:
+**Add the live GitHub source** (optional: set `GITHUB_TOKEN` to raise the API rate limit):
 ```bash
 python -m transformer --github octocat --out out/github.json
-# optional: set GITHUB_TOKEN to raise the API rate limit
 ```
 
 **All six sources at once** (one person merged across five — see [`out/all_sources.json`](out/all_sources.json)):
 ```bash
-python -m transformer \
-  --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt \
-  --linkedin samples/linkedin_bob.json \
-  --notes samples/notes_bob.txt \
-  --out out/all_sources.json
+python -m transformer --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt --linkedin samples/linkedin_bob.json --notes samples/notes_bob.txt --out out/all_sources.json
 ```
 `--linkedin` accepts a profile URL, a saved profile file, or inline JSON.
 `--notes` takes recruiter notes `.txt` file(s).
@@ -181,7 +189,6 @@ dropped rather than guessed — honest-empty over wrong-but-confident.
 ## Tests
 
 ```bash
-pip install pytest
 python -m pytest -q          # 310 tests: normalizers, adapters, merge, projection, edge cases, e2e + gold
 python -m tests.make_gold    # regenerate the gold snapshot after intended changes
 ```

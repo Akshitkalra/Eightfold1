@@ -3,5 +3,6 @@ pycountry>=23.12
 python-dateutil>=2.8
 requests>=2.31
 flask>=3.0
+pytest>=7.4          # test suite (310 tests)
 # stdlib used elsewhere: csv, json, re, dataclasses, argparse, hashlib
 # optional (resume PDF stretch): pdfplumber>=0.10
