@@ -227,4 +227,5 @@ tests/     + gold/bob_profile.json
 - **Scale** — iterator-based adapters and O(n) union-find clustering by hashed
   keys; fine for thousands of candidates.
 #   E i g h t f o l d  
+ #   E i g h t f o l d  
  
