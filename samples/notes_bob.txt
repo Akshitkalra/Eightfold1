@@ -1,0 +1,11 @@
+Recruiter screen — 2026-06-12
+
+Spoke with Robert Smith (goes by "Bob"). Around 8 years of experience, currently
+Staff Engineer at Acme working on data platforms. Very strong in Python and AWS;
+also comfortable with Kubernetes and Postgres. Mentioned some Go on the side.
+
+Based in the San Francisco Bay Area. Open to senior/staff roles. Reach him at
+bob.smith@example.com or (415) 555-0100. Followed up over LinkedIn:
+linkedin.com/in/bobsmith.
+
+Overall: strong technical signal, good communicator. Move to onsite.

@@ -21,7 +21,9 @@ from typing import Any, Optional
 SOURCE_TRUST: dict[str, float] = {
     "ats_json": 0.95,
     "recruiter_csv": 0.90,
+    "linkedin": 0.75,        # candidate-curated profile, fairly reliable
     "resume": 0.70,
+    "recruiter_notes": 0.60,  # recruiter's free-text observations, subjective
     "github": 0.55,
 }
 

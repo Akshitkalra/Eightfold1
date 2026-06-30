@@ -38,6 +38,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="input files (CSV / ATS JSON / resume .txt|.pdf)")
     ap.add_argument("--github", nargs="*", default=[],
                     help="GitHub login(s) to fetch as an unstructured source")
+    ap.add_argument("--linkedin", nargs="*", default=[],
+                    help="LinkedIn profile URL(s), saved profile file(s), or inline JSON")
+    ap.add_argument("--notes", nargs="*", default=[],
+                    help="recruiter notes .txt file(s) (free text)")
     ap.add_argument("--config", default=None,
                     help="projection config JSON (omit for default schema)")
     ap.add_argument("--out", default=None,
@@ -47,7 +51,9 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     config = _load_config(args.config)
-    result = run(args.inputs, github_logins=args.github, config=config)
+    result = run(args.inputs, github_logins=args.github,
+                 linkedin_inputs=args.linkedin, notes_paths=args.notes,
+                 config=config)
 
     for w in result.warnings:
         print(f"warning: {w}", file=sys.stderr)

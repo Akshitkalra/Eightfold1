@@ -20,6 +20,11 @@ We exceed the "1 from each group" minimum to make the merge/dedup story strong.
 | Structured | ATS JSON blob | `.json` | semi-structured; **field names differ from ours** → map |
 | Unstructured | GitHub profile | public REST API | name, bio, repos, languages → skills |
 | Unstructured | Resume | `.txt` (+ `.pdf` stretch) | free-text → experience, education, skills |
+| Unstructured | LinkedIn profile | URL / saved JSON or text | link (URL) or name, headline, skills, experience, education (export) |
+| Unstructured | Recruiter notes | `.txt` free text | name, email, phone, curated skills scanned from prose |
+
+> All six are implemented. LinkedIn is **not** scraped live (auth-walled / ToS);
+> a URL contributes the link, a saved export is parsed.
 
 Each adapter is **isolated and optional**. A missing/garbage source logs a warning and yields nothing — it must never crash the run.
 

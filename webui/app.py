@@ -23,10 +23,13 @@ SAMPLES = ROOT / "samples"
 CONFIGS = ROOT / "configs"
 
 # Sample files offered as checkboxes (label -> path).
+# label -> (path, kind). kind tells run() which adapter group the file feeds.
 SAMPLE_FILES = {
-    "Recruiter CSV (structured)": SAMPLES / "recruiter.csv",
-    "ATS JSON (structured)": SAMPLES / "ats.json",
-    "Resume .txt (unstructured)": SAMPLES / "resume_bob.txt",
+    "Recruiter CSV (structured)": (SAMPLES / "recruiter.csv", "input"),
+    "ATS JSON (structured)": (SAMPLES / "ats.json", "input"),
+    "Resume .txt (unstructured)": (SAMPLES / "resume_bob.txt", "input"),
+    "LinkedIn profile (unstructured)": (SAMPLES / "linkedin_bob.json", "linkedin"),
+    "Recruiter notes (unstructured)": (SAMPLES / "notes_bob.txt", "notes"),
 }
 
 app = Flask(__name__)
@@ -52,6 +55,7 @@ def index():
         "sample_files": SAMPLE_FILES,
         "selected": list(SAMPLE_FILES.keys()),  # all checked by default
         "github": "",
+        "linkedin": "",
         "config_choice": "default",
         "pasted_config": "",
         "profiles": None,
@@ -65,12 +69,23 @@ def index():
     if request.method == "POST":
         selected = request.form.getlist("samples")
         github = (request.form.get("github") or "").strip()
+        linkedin_url = (request.form.get("linkedin") or "").strip()
         config_choice = request.form.get("config_choice", "default")
         pasted = request.form.get("pasted_config", "")
-        ctx.update(selected=selected, github=github,
+        ctx.update(selected=selected, github=github, linkedin=linkedin_url,
                    config_choice=config_choice, pasted_config=pasted)
 
-        input_paths = [str(SAMPLE_FILES[label]) for label in selected if label in SAMPLE_FILES]
+        # Route each checked sample to the right adapter group by its kind.
+        input_paths, linkedin_inputs, notes_paths = [], [], []
+        for label in selected:
+            if label not in SAMPLE_FILES:
+                continue
+            path, kind = SAMPLE_FILES[label]
+            {"input": input_paths, "linkedin": linkedin_inputs,
+             "notes": notes_paths}[kind].append(str(path))
+
+        if linkedin_url:
+            linkedin_inputs.append(linkedin_url)
 
         # Handle uploaded files (saved to a temp dir, original extension preserved).
         tmpdir = tempfile.mkdtemp(prefix="transformer_ui_")
@@ -87,7 +102,9 @@ def index():
             return render_template("index.html", **ctx)
 
         logins = [github] if github else []
-        result = run(input_paths, github_logins=logins, config=config)
+        result = run(input_paths, github_logins=logins,
+                     linkedin_inputs=linkedin_inputs, notes_paths=notes_paths,
+                     config=config)
         ctx.update(
             profiles=result.profiles,
             warnings=result.warnings,

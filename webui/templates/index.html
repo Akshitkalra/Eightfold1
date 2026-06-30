@@ -24,7 +24,7 @@
       <h2>1 · Sources</h2>
       <p class="hint">Structured + unstructured. All sample inputs are pre-selected.</p>
       <div class="checklist">
-        {% for label, path in sample_files.items() %}
+        {% for label in sample_files.keys() %}
         <label class="check">
           <input type="checkbox" name="samples" value="{{ label }}"
                  {% if label in selected %}checked{% endif %}>
@@ -36,6 +36,11 @@
       <label class="field">
         <span>GitHub handle <em>(live unstructured source)</em></span>
         <input type="text" name="github" value="{{ github }}" placeholder="e.g. octocat">
+      </label>
+
+      <label class="field">
+        <span>LinkedIn URL <em>(link only — not scraped)</em></span>
+        <input type="text" name="linkedin" value="{{ linkedin }}" placeholder="linkedin.com/in/...">
       </label>
 
       <label class="field">

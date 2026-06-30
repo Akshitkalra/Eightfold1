@@ -28,6 +28,13 @@ touches — so config changes never require engine changes.
 | Structured | ATS JSON (own field names) | [`ats_json.py`](transformer/adapters/ats_json.py) |
 | Unstructured | GitHub profile (live REST API) | [`github.py`](transformer/adapters/github.py) |
 | Unstructured | Resume `.txt` (`.pdf` optional) | [`resume_text.py`](transformer/adapters/resume_text.py) |
+| Unstructured | LinkedIn profile (URL / saved export) | [`linkedin.py`](transformer/adapters/linkedin.py) |
+| Unstructured | Recruiter notes (`.txt` free text) | [`recruiter_notes.py`](transformer/adapters/recruiter_notes.py) |
+
+> **LinkedIn note:** live scraping is auth-walled and against LinkedIn's ToS, so
+> we never fetch it over the network. A profile **URL** contributes the
+> canonical link only (still useful for merge/dedup); a **saved/exported profile**
+> (JSON or text) is parsed for name, headline, skills, experience, education.
 
 ---
 
@@ -64,6 +71,17 @@ python -m transformer \
 python -m transformer --github octocat --out out/github.json
 # optional: set GITHUB_TOKEN to raise the API rate limit
 ```
+
+**All six sources at once** (one person merged across five — see [`out/all_sources.json`](out/all_sources.json)):
+```bash
+python -m transformer \
+  --inputs samples/recruiter.csv samples/ats.json samples/resume_bob.txt \
+  --linkedin samples/linkedin_bob.json \
+  --notes samples/notes_bob.txt \
+  --out out/all_sources.json
+```
+`--linkedin` accepts a profile URL, a saved profile file, or inline JSON.
+`--notes` takes recruiter notes `.txt` file(s).
 
 **Print to stdout** (omit `--out`); **fail on schema violations** (add `--strict`).
 
@@ -123,8 +141,10 @@ profile.
 **Conflict resolution.** List fields (emails, phones, skills, links) are
 **unioned + deduped**. Scalar fields (name, headline, location, years) pick a
 **winner by source trust × agreement count × completeness**. Trust ranking:
-`ATS ≈ Recruiter CSV > Resume > GitHub` (see `SOURCE_TRUST` in
-[`canonical.py`](transformer/canonical.py)).
+`ATS > Recruiter CSV > LinkedIn > Resume > Recruiter notes > GitHub` (see
+`SOURCE_TRUST` in [`canonical.py`](transformer/canonical.py)). Ties are broken
+deterministically (completeness, then lexical) so input order never changes the
+winner.
 
 **Confidence.** `trust_weight(source) × agreement_factor × completeness_factor`,
 clamped to `[0,1]`; `overall_confidence` is the weighted mean over populated
@@ -182,7 +202,7 @@ python -m tests.make_gold    # regenerate the gold snapshot after intended chang
 transformer/
   detect.py            source sniffing + dispatch
   canonical.py         RawRecord / CanonicalRecord / trust ranks / id
-  adapters/            csv_recruiter, ats_json, github, resume_text
+  adapters/            csv_recruiter, ats_json, github, resume_text, linkedin, recruiter_notes
   normalize/           phones, dates, country, skills, emails
   merge.py             normalize → cluster → resolve → score
   confidence.py        per-field + overall confidence
