@@ -69,6 +69,18 @@ python -m transformer --github octocat --out out/github.json
 
 Produced sample outputs are committed in [`out/`](out/).
 
+### Minimal web UI (optional)
+
+A small Flask UI ([`webui/`](webui/)) wraps the same `pipeline.run` — no engine
+logic lives in it. Pick sources, add a GitHub handle, choose a config, and view
+the merged profiles as cards (confidence bars, skill chips, provenance tables)
+plus the raw JSON.
+
+```bash
+pip install flask
+python -m webui.app          # open http://127.0.0.1:5000
+```
+
 ---
 
 ## The configurable-output twist
@@ -178,6 +190,7 @@ transformer/
   validate.py          output schema validation
   pipeline.py          end-to-end wiring
   cli.py               thin CLI surface
+webui/                 minimal Flask UI (app.py, templates/, static/)
 data/skills_canonical.json
 configs/   default.json  custom.json
 samples/   recruiter.csv  ats.json  resume_bob.txt

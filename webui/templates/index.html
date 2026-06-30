@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Candidate Data Transformer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">◇</span>
+    <div>
+      <h1>Multi-Source Candidate Data Transformer</h1>
+      <p class="tagline">Messy multi-source inputs &rarr; one clean, deduplicated, traceable profile per person.</p>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ============ LEFT: input panel ============ -->
+  <section class="panel inputs">
+    <form method="post" enctype="multipart/form-data">
+      <h2>1 · Sources</h2>
+      <p class="hint">Structured + unstructured. All sample inputs are pre-selected.</p>
+      <div class="checklist">
+        {% for label, path in sample_files.items() %}
+        <label class="check">
+          <input type="checkbox" name="samples" value="{{ label }}"
+                 {% if label in selected %}checked{% endif %}>
+          <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <label class="field">
+        <span>GitHub handle <em>(live unstructured source)</em></span>
+        <input type="text" name="github" value="{{ github }}" placeholder="e.g. octocat">
+      </label>
+
+      <label class="field">
+        <span>Upload your own files <em>(.csv / .json / .txt)</em></span>
+        <input type="file" name="uploads" multiple>
+      </label>
+
+      <h2>2 · Output config</h2>
+      <div class="radios">
+        <label class="radio">
+          <input type="radio" name="config_choice" value="default"
+                 {% if config_choice == 'default' %}checked{% endif %}>
+          <span>Default canonical schema</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="config_choice" value="custom"
+                 {% if config_choice == 'custom' %}checked{% endif %}>
+          <span>Custom config <em>(configs/custom.json)</em></span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="config_choice" value="paste"
+                 {% if config_choice == 'paste' %}checked{% endif %}>
+          <span>Paste custom config JSON</span>
+        </label>
+      </div>
+      <textarea name="pasted_config" class="config-box" rows="7"
+                placeholder='{"fields":[{"path":"full_name","type":"string","required":true}],"include_confidence":true}'>{{ pasted_config }}</textarea>
+
+      <button type="submit" class="go">Transform &rarr;</button>
+    </form>
+  </section>
+
+  <!-- ============ RIGHT: results ============ -->
+  <section class="panel results">
+    {% if error %}
+      <div class="banner error">{{ error }}</div>
+    {% endif %}
+
+    {% if profiles is none %}
+      <div class="empty">
+        <p>Pick sources on the left and hit <strong>Transform</strong>.</p>
+        <p class="hint">The engine detects each source, normalizes values, merges
+          duplicates across sources, scores confidence, and projects the output
+          through your chosen config.</p>
+      </div>
+    {% else %}
+      <div class="summary">
+        <span class="pill">{{ count }} profile{{ '' if count == 1 else 's' }}</span>
+        {% if warnings %}<span class="pill warn">{{ warnings|length }} warning{{ '' if warnings|length == 1 else 's' }}</span>{% endif %}
+        {% if validation %}<span class="pill bad">{{ validation|length }} validation issue{{ '' if validation|length == 1 else 's' }}</span>{% endif %}
+        {% if not warnings and not validation %}<span class="pill ok">clean run</span>{% endif %}
+      </div>
+
+      {% if warnings %}
+      <details class="notes">
+        <summary>Warnings ({{ warnings|length }})</summary>
+        <ul>{% for w in warnings %}<li>{{ w }}</li>{% endfor %}</ul>
+      </details>
+      {% endif %}
+
+      {% for p in profiles %}
+      <article class="card">
+        <div class="card-head">
+          <h3>{{ p.full_name or 'Unknown name' }}</h3>
+          {% if p.overall_confidence is defined %}
+          <span class="conf" title="overall confidence">
+            <span class="conf-bar"><span style="width: {{ p.overall_confidence * 100 }}%"></span></span>
+            {{ p.overall_confidence | pct }}
+          </span>
+          {% endif %}
+        </div>
+
+        {% if p.headline %}<p class="headline">{{ p.headline }}</p>{% endif %}
+
+        <div class="kv">
+          {% if p.emails %}<div><b>Emails</b><span>{{ p.emails | join(', ') }}</span></div>{% endif %}
+          {% if p.primary_email %}<div><b>Email</b><span>{{ p.primary_email }}</span></div>{% endif %}
+          {% if p.phones %}<div><b>Phones</b><span>{{ p.phones | join(', ') }}</span></div>{% endif %}
+          {% if p.phone %}<div><b>Phone</b><span>{{ p.phone }}</span></div>{% endif %}
+          {% if p.location %}<div><b>Location</b><span>
+            {{ [p.location.city, p.location.region, p.location.country] | select | join(', ') }}</span></div>{% endif %}
+          {% if p.country %}<div><b>Country</b><span>{{ p.country }}</span></div>{% endif %}
+          {% if p.years_experience is not none and p.years_experience is defined %}
+            <div><b>Experience</b><span>{{ p.years_experience }} yrs</span></div>{% endif %}
+          {% if p.linkedin %}<div><b>LinkedIn</b><span>{{ p.linkedin }}</span></div>{% endif %}
+          {% if p.links and p.links.github %}<div><b>GitHub</b><span>{{ p.links.github }}</span></div>{% endif %}
+        </div>
+
+        {% if p.skills %}
+        <div class="skills">
+          <b>Skills</b>
+          <div class="chips">
+            {% for s in p.skills %}
+              {% if s is mapping %}
+                <span class="chip" title="confidence {{ s.confidence | pct }} · {{ s.sources | join(', ') }}">
+                  {{ s.name }}<i>{{ s.confidence | pct }}</i></span>
+              {% else %}
+                <span class="chip">{{ s }}</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if p.experience %}
+        <details class="sub">
+          <summary>Experience ({{ p.experience|length }})</summary>
+          <ul class="timeline">
+            {% for e in p.experience %}
+            <li><b>{{ e.title or '—' }}</b>{% if e.company %} · {{ e.company }}{% endif %}
+              <span class="dates">{{ e.start or '?' }} – {{ e.end or 'present' }}</span>
+              {% if e.summary %}<p>{{ e.summary }}</p>{% endif %}</li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endif %}
+
+        {% if p.education %}
+        <details class="sub">
+          <summary>Education ({{ p.education|length }})</summary>
+          <ul class="timeline">
+            {% for e in p.education %}
+            <li><b>{{ e.degree or '—' }}</b>{% if e.field %}, {{ e.field }}{% endif %}
+              {% if e.institution %} · {{ e.institution }}{% endif %}
+              <span class="dates">{{ e.end_year or '' }}</span></li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endif %}
+
+        {% if p.provenance %}
+        <details class="sub">
+          <summary>Provenance ({{ p.provenance|length }}) — where each value came from</summary>
+          <table class="prov">
+            <thead><tr><th>Field</th><th>Source</th><th>Method</th></tr></thead>
+            <tbody>
+              {% for pr in p.provenance %}
+              <tr><td>{{ pr.field }}</td><td><span class="src">{{ pr.source }}</span></td><td>{{ pr.method }}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </details>
+        {% endif %}
+      </article>
+      {% endfor %}
+
+      <details class="rawjson">
+        <summary>Raw JSON output</summary>
+        <pre>{{ raw_json }}</pre>
+      </details>
+    {% endif %}
+  </section>
+</main>
+
+<footer class="foot">
+  Akshit Kalra · deterministic &amp; explainable · provenance + confidence on every field
+</footer>
+</body>
+</html>
