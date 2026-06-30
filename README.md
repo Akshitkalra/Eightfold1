@@ -182,7 +182,7 @@ dropped rather than guessed — honest-empty over wrong-but-confident.
 
 ```bash
 pip install pytest
-python -m pytest -q          # 25 tests: normalizers, merge, projection, e2e + gold
+python -m pytest -q          # 310 tests: normalizers, adapters, merge, projection, edge cases, e2e + gold
 python -m tests.make_gold    # regenerate the gold snapshot after intended changes
 ```
 
@@ -226,6 +226,3 @@ tests/     + gold/bob_profile.json
   unknowns → `null`, never invented.
 - **Scale** — iterator-based adapters and O(n) union-find clustering by hashed
   keys; fine for thousands of candidates.
-#   E i g h t f o l d  
- #   E i g h t f o l d  
- 
