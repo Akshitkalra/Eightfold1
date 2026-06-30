@@ -1,0 +1,46 @@
+[
+  {
+    "candidate_name": "Robert Smith",
+    "emailAddress": "bob.smith@example.com",
+    "phoneNumber": "+1-415-555-0100",
+    "current_title": "Staff Software Engineer",
+    "yearsExperience": 8,
+    "address": { "city": "San Francisco", "state": "California", "country": "USA" },
+    "skill_set": ["Python", "reactjs", "AWS", "PostgreSQL", "Docker"],
+    "linkedin_url": "https://linkedin.com/in/bobsmith",
+    "github_url": "https://github.com/bobsmith",
+    "work_history": [
+      {
+        "employer": "Acme Corp",
+        "role": "Staff Software Engineer",
+        "start_date": "March 2021",
+        "end_date": "present",
+        "description": "Led the data platform team."
+      },
+      {
+        "employer": "Hooli",
+        "role": "Software Engineer",
+        "from": "2018",
+        "to": "2021"
+      }
+    ],
+    "education": [
+      {
+        "school": "Stanford University",
+        "degree": "B.S.",
+        "major": "Computer Science",
+        "graduation_year": "2018"
+      }
+    ]
+  },
+  {
+    "firstName": "Mei",
+    "lastName": "Chen",
+    "email": "mei.chen@example.org",
+    "mobile": "+44 20 7946 0958",
+    "competencies": ["TypeScript", "Node.js", "GraphQL", "k8s"],
+    "geo": { "city": "London", "country": "United Kingdom" },
+    "summary": "Full-stack engineer focused on developer tooling."
+  },
+  { "this_record": "is garbage", "with_no_useful_fields": true }
+]

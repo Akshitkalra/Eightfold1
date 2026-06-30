@@ -1,0 +1,170 @@
+{
+  "candidate_id": "cand_22185c38ce3f",
+  "full_name": "Robert Smith",
+  "emails": [
+    "bob.smith@example.com"
+  ],
+  "phones": [
+    "+14155550100"
+  ],
+  "location": {
+    "city": "San Francisco",
+    "region": "California",
+    "country": "US"
+  },
+  "links": {
+    "linkedin": "https://linkedin.com/in/bobsmith",
+    "github": "https://github.com/bobsmith",
+    "portfolio": null,
+    "other": []
+  },
+  "headline": "Staff Software Engineer",
+  "years_experience": 8.0,
+  "skills": [
+    {
+      "name": "AWS",
+      "confidence": 1.0,
+      "sources": [
+        "ats_json",
+        "resume"
+      ]
+    },
+    {
+      "name": "Docker",
+      "confidence": 1.0,
+      "sources": [
+        "ats_json",
+        "resume"
+      ]
+    },
+    {
+      "name": "PostgreSQL",
+      "confidence": 1.0,
+      "sources": [
+        "ats_json",
+        "resume"
+      ]
+    },
+    {
+      "name": "Python",
+      "confidence": 1.0,
+      "sources": [
+        "ats_json",
+        "resume"
+      ]
+    },
+    {
+      "name": "React",
+      "confidence": 1.0,
+      "sources": [
+        "ats_json",
+        "resume"
+      ]
+    },
+    {
+      "name": "GraphQL",
+      "confidence": 0.7,
+      "sources": [
+        "resume"
+      ]
+    },
+    {
+      "name": "JavaScript",
+      "confidence": 0.7,
+      "sources": [
+        "resume"
+      ]
+    },
+    {
+      "name": "Kubernetes",
+      "confidence": 0.7,
+      "sources": [
+        "resume"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "company": "Acme Corp",
+      "title": "Senior Software Engineer",
+      "start": null,
+      "end": null,
+      "summary": null
+    },
+    {
+      "company": "Acme Corp",
+      "title": "Staff Software Engineer",
+      "start": "2021-03",
+      "end": null,
+      "summary": "Led the data platform team."
+    },
+    {
+      "company": "Hooli",
+      "title": "Software Engineer",
+      "start": "2018-01",
+      "end": "2021-01",
+      "summary": "Built internal analytics tooling."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "B.S.",
+      "field": "Computer Science",
+      "end_year": "2018"
+    }
+  ],
+  "provenance": [
+    {
+      "field": "emails",
+      "source": "ats_json",
+      "method": "merged"
+    },
+    {
+      "field": "phones",
+      "source": "ats_json",
+      "method": "normalized"
+    },
+    {
+      "field": "full_name",
+      "source": "ats_json",
+      "method": "merged"
+    },
+    {
+      "field": "headline",
+      "source": "ats_json",
+      "method": "direct"
+    },
+    {
+      "field": "years_experience",
+      "source": "ats_json",
+      "method": "direct"
+    },
+    {
+      "field": "location",
+      "source": "ats_json",
+      "method": "normalized"
+    },
+    {
+      "field": "links",
+      "source": "ats_json",
+      "method": "merged"
+    },
+    {
+      "field": "skills",
+      "source": "ats_json",
+      "method": "merged"
+    },
+    {
+      "field": "experience",
+      "source": "ats_json",
+      "method": "merged"
+    },
+    {
+      "field": "education",
+      "source": "ats_json",
+      "method": "merged"
+    }
+  ],
+  "overall_confidence": 0.925
+}

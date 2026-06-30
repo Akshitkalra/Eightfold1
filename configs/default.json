@@ -1,0 +1,5 @@
+{
+  "_comment": "Empty fields list => emit the full canonical schema. Toggle meta below.",
+  "include_provenance": true,
+  "include_confidence": true
+}

@@ -1,0 +1,19 @@
+Robert Smith
+San Francisco, CA
+bob.smith@example.com | (415) 555-0100 | github.com/bobsmith
+
+Summary
+Senior software engineer with 8 years building large-scale data platforms.
+
+Skills
+Python, JavaScript, React.js, AWS, Postgres, Docker, Kubernetes, GraphQL
+
+Experience
+Staff Software Engineer, Acme Corp    March 2021 - Present
+- Led the data platform team of 6 engineers.
+- Cut pipeline latency by 40%.
+Software Engineer at Hooli    Jun 2018 - Feb 2021
+- Built internal analytics tooling.
+
+Education
+B.S. Computer Science, Stanford University, 2018

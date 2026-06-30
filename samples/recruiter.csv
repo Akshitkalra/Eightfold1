@@ -1,0 +1,5 @@
+name,email,phone,current_company,title,location
+Bob Smith,bob.smith@example.com,(415) 555-0100,Acme Corp,Senior Software Engineer,San Francisco
+Jane Doe,jane.doe@globex.io,+91 98765 43210,Globex,Data Scientist,Bengaluru
+,malformed-row-no-name,,,,
+Priya Nair,PRIYA.NAIR@mail.com,9988776655,Initech,Backend Engineer,India

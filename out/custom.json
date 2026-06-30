@@ -1,0 +1,52 @@
+[
+  {
+    "full_name": "Priya Nair",
+    "primary_email": "priya.nair@mail.com",
+    "phone": null,
+    "country": "IN",
+    "skills": [],
+    "linkedin": null,
+    "overall_confidence": 0.85
+  },
+  {
+    "full_name": "Robert Smith",
+    "primary_email": "bob.smith@example.com",
+    "phone": "+14155550100",
+    "country": "US",
+    "skills": [
+      "AWS",
+      "Docker",
+      "PostgreSQL",
+      "Python",
+      "React",
+      "GraphQL",
+      "JavaScript",
+      "Kubernetes"
+    ],
+    "linkedin": "https://linkedin.com/in/bobsmith",
+    "overall_confidence": 0.925
+  },
+  {
+    "full_name": "Jane Doe",
+    "primary_email": "jane.doe@globex.io",
+    "phone": "+919876543210",
+    "country": null,
+    "skills": [],
+    "linkedin": null,
+    "overall_confidence": 0.858
+  },
+  {
+    "full_name": "Mei Chen",
+    "primary_email": "mei.chen@example.org",
+    "phone": "+442079460958",
+    "country": "GB",
+    "skills": [
+      "GraphQL",
+      "Kubernetes",
+      "Node.js",
+      "TypeScript"
+    ],
+    "linkedin": null,
+    "overall_confidence": 0.906
+  }
+]
