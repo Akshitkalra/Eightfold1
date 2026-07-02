@@ -10,7 +10,7 @@ canonical profile per person** — normalized, deduplicated, with **provenance**
 
 Author: **Akshit Kalra** · akshit0273.be23@chitkara.edu.in
 
----
+--
 
 ## What it does (pipeline)
 
